@@ -11,6 +11,8 @@ from api.permissions import IsAuthorOrReadOnly
 from api.pagination import CustomPagination
 from django.db.models import Sum
 from django.urls import reverse
+from django_filters.rest_framework import DjangoFilterBackend
+from api.filters import RecipeFilter
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
@@ -32,6 +34,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
     serializer_class = RecipeSerializer
     pagination_class = CustomPagination
     permission_classes = [IsAuthorOrReadOnly]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = RecipeFilter
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
