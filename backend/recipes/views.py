@@ -1,12 +1,15 @@
+import csv
 from rest_framework import viewsets
 from rest_framework import permissions, status
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
+from django.http import HttpResponse
 from .serializers import RecipeSerializer, IngredientSerializer, ShortRecipeSerializer
 from .models import Recipe, Ingredient, IngredientInRecipe, Favorite, ShoppingCart
 from api.permissions import IsAuthorOrReadOnly
 from api.pagination import CustomPagination
+from django.db.models import Sum
 
 
 
@@ -82,3 +85,42 @@ class RecipeViewSet(viewsets.ModelViewSet):
     )
     def shopping_cart(self, request, pk=None):
         return self._handle_recipe_action(request, pk, ShoppingCart)
+    
+    def generate_shopping_cart_csv(self, ingredients):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="shopping_list.csv"'
+        writer = csv.writer(response)
+        writer.writerow(['Ингредиент', 'Единица измерения', 'Количество'])
+        for item in ingredients:
+            writer.writerow([
+                item['ingredient__name'],
+                item['ingredient__measurement_unit'],
+                item['total_amount']
+            ])
+        return response
+    
+    @action(
+        methods=['get'],
+        detail=False,
+        url_path='download_shopping_cart',
+        permission_classes=(permissions.IsAuthenticated,)
+    )
+    def download_shopping_cart(self, request):
+        user = request.user
+        recipes = Recipe.objects.filter(shopping_cart__user=user)
+
+        if not recipes.exists():
+            return Response(
+                    {'error': 'В списке покупок не найдены рецепты'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+        ingredients = (
+            IngredientInRecipe.objects
+            .filter(recipe__in=recipes)
+            .values('ingredient__name', 'ingredient__measurement_unit')
+            .annotate(total_amount=Sum('amount'))
+            .order_by('ingredient__name')
+        )
+
+        return self.generate_shopping_cart_csv(ingredients)
