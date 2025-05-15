@@ -10,7 +10,7 @@ from .models import Recipe, Ingredient, IngredientInRecipe, Favorite, ShoppingCa
 from api.permissions import IsAuthorOrReadOnly
 from api.pagination import CustomPagination
 from django.db.models import Sum
-
+from django.urls import reverse
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
@@ -35,6 +35,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+    @action(
+        methods=['GET'],
+        detail=True,
+        url_path='get-link'
+    )
+    def get_short_link(self, request, pk=None):
+        get_object_or_404(Recipe, pk=pk)
+        short_url = request.build_absolute_uri(
+            reverse("short-link", args=[pk])
+        )
+        return Response({"short-link": short_url})
 
     def _handle_recipe_action(self, request, recipe_id, model):
         user = request.user
@@ -100,7 +112,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return response
     
     @action(
-        methods=['get'],
+        methods=['GET'],
         detail=False,
         url_path='download_shopping_cart',
         permission_classes=(permissions.IsAuthenticated,)
