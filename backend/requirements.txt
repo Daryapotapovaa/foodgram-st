@@ -12,6 +12,5 @@ pytest-django==4.4.0
 pytest-pythonpath==0.7.3
 Cython
 django-filter==23.1
-django-urlshortner
 drf-extra-fields
 python-dotenv
