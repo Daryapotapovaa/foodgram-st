@@ -1,0 +1,82 @@
+[
+    {
+      "email": "alex@example.com",
+      "username": "alex",
+      "first_name": "Алексей",
+      "last_name": "Смирнов",
+      "password": "pbkdf2_sha256$260000$hash",
+      "is_staff": false
+    },
+    {
+      "email": "maria@example.com",
+      "username": "maria",
+      "first_name": "Мария",
+      "last_name": "Петрова",
+      "password": "pbkdf2_sha256$260000$hash",
+      "is_staff": false
+    },
+    {
+      "email": "dmitry@example.com",
+      "username": "dmitry",
+      "first_name": "Дмитрий",
+      "last_name": "Кузнецов",
+      "password": "pbkdf2_sha256$260000$hash",
+      "is_staff": false
+    },
+    {
+      "email": "olga@example.com",
+      "username": "olga",
+      "first_name": "Ольга",
+      "last_name": "Васильева",
+      "password": "pbkdf2_sha256$260000$hash",
+      "is_staff": false
+    },
+    {
+      "email": "sergey@example.com",
+      "username": "sergey",
+      "first_name": "Сергей",
+      "last_name": "Попов",
+      "password": "pbkdf2_sha256$260000$hash",
+      "is_staff": false
+    },
+    {
+      "email": "anna@example.com",
+      "username": "anna",
+      "first_name": "Анна",
+      "last_name": "Соколова",
+      "password": "pbkdf2_sha256$260000$hash",
+      "is_staff": false
+    },
+    {
+      "email": "mikhail@example.com",
+      "username": "mikhail",
+      "first_name": "Михаил",
+      "last_name": "Новиков",
+      "password": "pbkdf2_sha256$260000$hash",
+      "is_staff": false
+    },
+    {
+      "email": "ekaterina@example.com",
+      "username": "ekaterina",
+      "first_name": "Екатерина",
+      "last_name": "Морозова",
+      "password": "pbkdf2_sha256$260000$hash",
+      "is_staff": false
+    },
+    {
+      "email": "andrey@example.com",
+      "username": "andrey",
+      "first_name": "Андрей",
+      "last_name": "Фёдоров",
+      "password": "pbkdf2_sha256$260000$hash",
+      "is_staff": false
+    },
+    {
+      "email": "natalia@example.com",
+      "username": "natalia",
+      "first_name": "Наталья",
+      "last_name": "Волкова",
+      "password": "pbkdf2_sha256$260000$hash",
+      "is_staff": false
+    }
+  ]

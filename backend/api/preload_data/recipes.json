@@ -1,0 +1,258 @@
+[
+    {
+      "name": "Салат Цезарь",
+      "text": "Классический салат с курицей, сухариками и соусом.",
+      "cooking_time": 30,
+      "author": "alex",
+      "ingredients": [
+        {
+          "name": "куриное филе",
+          "amount": 300
+        },
+        {
+          "name": "салат романо",
+          "amount": 200
+        },
+        {
+          "name": "сухарики белые",
+          "amount": 50
+        },
+        {
+          "name": "пармезан",
+          "amount": 50
+        },
+        {
+          "name": "оливковое масло",
+          "amount": 30
+        }
+      ],
+      "image": "recipe_images/caesar.jpg"
+    },
+    {
+      "name": "Паста Карбонара",
+      "text": "Итальянская паста с беконом, яйцами и сыром.",
+      "cooking_time": 25,
+      "author": "alex",
+      "ingredients": [
+        {
+          "name": "спагетти",
+          "amount": 200
+        },
+        {
+          "name": "бекон",
+          "amount": 150
+        },
+        {
+          "name": "яйца куриные",
+          "amount": 2
+        },
+        {
+          "name": "пармезан",
+          "amount": 50
+        },
+        {
+          "name": "сливки 20%",
+          "amount": 100
+        }
+      ],
+      "image": "recipe_images/carbonara.jpg"
+    },
+    {
+      "name": "Борщ",
+      "text": "Традиционный украинский борщ с мясом и свеклой.",
+      "cooking_time": 90,
+      "author": "maria",
+      "ingredients": [
+        {
+          "name": "говядина",
+          "amount": 500
+        },
+        {
+          "name": "свекла",
+          "amount": 300
+        },
+        {
+          "name": "капуста белокочанная",
+          "amount": 200
+        },
+        {
+          "name": "картофель",
+          "amount": 300
+        },
+        {
+          "name": "морковь",
+          "amount": 100
+        },
+        {
+          "name": "лук репчатый",
+          "amount": 25
+        },
+        {
+          "name": "сметана",
+          "amount": 50
+        }
+      ],
+      "image": "recipe_images/borscht.jpg"
+    },
+    {
+      "name": "Панкейки",
+      "text": "Американские пышные панкейки с кленовым сиропом.",
+      "cooking_time": 20,
+      "author": "dmitry",
+      "ingredients": [
+        {
+          "name": "мука",
+          "amount": 200
+        },
+        {
+          "name": "молоко",
+          "amount": 200
+        },
+        {
+          "name": "яйца куриные",
+          "amount": 2
+        },
+        {
+          "name": "сахар",
+          "amount": 30
+        },
+        {
+          "name": "разрыхлитель",
+          "amount": 10
+        },
+        {
+          "name": "кленовый сироп",
+          "amount": 50
+        }
+      ],
+      "image": "recipe_images/pancakes.jpg"
+    },
+    {
+      "name": "Греческий салат",
+      "text": "Свежий салат с огурцами, помидорами, сыром фета и оливками.",
+      "cooking_time": 15,
+      "author": "olga",
+      "ingredients": [
+        {
+          "name": "помидоры",
+          "amount": 200
+        },
+        {
+          "name": "огурцы свежие",
+          "amount": 200
+        },
+        {
+          "name": "перец болгарский красный",
+          "amount": 50
+        },
+        {
+          "name": "оливки",
+          "amount": 100
+        },
+        {
+          "name": "сыр фета",
+          "amount": 150
+        },
+        {
+          "name": "оливковое масло",
+          "amount": 30
+        }
+      ],
+      "image": "recipe_images/greek_salad.jpg"
+    },
+    {
+      "name": "Шоколадный мусс",
+      "text": "Нежный десерт из темного шоколада и сливок.",
+      "cooking_time": 30,
+      "author": "sergey",
+      "ingredients": [
+        {
+          "name": "шоколад черный горький 70%",
+          "amount": 150
+        },
+        {
+          "name": "сливки 33-35%",
+          "amount": 200
+        },
+        {
+          "name": "яйца куриные",
+          "amount": 3
+        },
+        {
+          "name": "сахар",
+          "amount": 50
+        }
+      ],
+      "image": "recipe_images/chocolate_mousse.jpg"
+    },
+    {
+      "name": "Тыквенный суп-пюре",
+      "text": "Ароматный крем-суп из тыквы с имбирем.",
+      "cooking_time": 40,
+      "author": "anna",
+      "ingredients": [
+        {
+          "name": "тыква",
+          "amount": 500
+        },
+        {
+          "name": "лук репчатый",
+          "amount": 50
+        },
+        {
+          "name": "имбирь корень",
+          "amount": 20
+        },
+        {
+          "name": "сливки 20%",
+          "amount": 200
+        },
+        {
+          "name": "овощной бульон",
+          "amount": 500
+        }
+      ],
+      "image": "recipe_images/pumpkin_soup.jpg"
+    },
+    {
+      "name": "Лазанья",
+      "text": "Итальянская лазанья с мясным фаршем и соусом бешамель.",
+      "cooking_time": 60,
+      "author": "mikhail",
+      "ingredients": [
+        {
+          "name": "листы для лазаньи",
+          "amount": 250
+        },
+        {
+          "name": "говяжий фарш",
+          "amount": 400
+        },
+        {
+          "name": "томатная паста",
+          "amount": 100
+        },
+        {
+          "name": "сыр моцарелла",
+          "amount": 200
+        },
+        {
+          "name": "пармезан",
+          "amount": 100
+        },
+        {
+          "name": "молоко",
+          "amount": 500
+        },
+        {
+          "name": "мука",
+          "amount": 50
+        },
+        {
+          "name": "сливочное масло",
+          "amount": 50
+        }
+      ],
+      "image": "recipe_images/lasagna.jpg"
+    }
+  ]
