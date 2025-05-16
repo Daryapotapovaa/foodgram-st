@@ -23,3 +23,29 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+class Subscription(models.Model):
+    follower = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='follower',
+        verbose_name="Подписчик"
+    )
+    following = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='following',
+        verbose_name="Подписан на"
+    )
+
+    class Meta:
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
+        ordering = ['id']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['follower', 'following'],
+                name='unique follower following in subscription'
+            )
+        ]

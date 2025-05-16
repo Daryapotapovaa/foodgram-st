@@ -99,6 +99,16 @@ class RecipeSerializer(serializers.ModelSerializer):
             })
 
         ingredient_ids = [ingredient.get('id') for ingredient in ingredients]
+
+        for id in ingredient_ids:
+            try:
+                Ingredient.objects.get(id=id)
+
+            except Ingredient.DoesNotExist:
+                raise serializers.ValidationError({
+                    'ingredients': f'Такого ингредиента не существует - {id}'
+                })
+
         if len(ingredient_ids) != len(set(ingredient_ids)):
             raise serializers.ValidationError({
                 'ingredients': 'Ингредиенты не должны повторяться'
