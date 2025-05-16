@@ -5,6 +5,7 @@ from django.core.validators import MinValueValidator
 
 User = get_user_model()
 
+
 class Ingredient(models.Model):
     name = models.CharField(
         max_length=128,

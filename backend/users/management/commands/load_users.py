@@ -1,13 +1,14 @@
 import json
-import os
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 
 
 User = get_user_model()
 
+
 class Command(BaseCommand):
     help = 'Загрузка пользователей из users.json'
+
     def handle(self, *args, **kwargs):
         with open('api/preload_data/users.json', encoding='utf-8') as file:
             data = json.load(file)
@@ -22,4 +23,5 @@ class Command(BaseCommand):
                 )
                 if created:
                     count += 1
-            self.stdout.write(self.style.SUCCESS(f'{count} пользователей загружено'))
+            self.stdout.write(self.style.SUCCESS(
+                f'{count} пользователей загружено'))

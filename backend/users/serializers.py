@@ -7,6 +7,7 @@ from .models import Subscription
 
 User = get_user_model()
 
+
 class CustomUserSerializer(DjoserUserSerializer):
     avatar = serializers.SerializerMethodField()
     is_subscribed = serializers.SerializerMethodField()
@@ -14,7 +15,7 @@ class CustomUserSerializer(DjoserUserSerializer):
     class Meta:
         model = User
         fields = (
-             'email', 'id', 'username', 'first_name',
+            'email', 'id', 'username', 'first_name',
             'last_name', 'is_subscribed', 'avatar'
         )
 
@@ -33,6 +34,7 @@ class CustomUserSerializer(DjoserUserSerializer):
             following=obj
         ).exists()
 
+
 class UserAvatarSerializer(serializers.ModelSerializer):
     avatar = Base64ImageField(required=True)
 
@@ -50,11 +52,12 @@ class UserAvatarSerializer(serializers.ModelSerializer):
         instance.avatar = avatar
         instance.save()
         return instance
-    
+
 
 class UserWithRecipesSerializer(CustomUserSerializer):
     recipes = serializers.SerializerMethodField()
-    recipes_count = serializers.IntegerField(source='recipes.count', read_only=True)
+    recipes_count = serializers.IntegerField(
+        source='recipes.count', read_only=True)
 
     class Meta(CustomUserSerializer.Meta):
         fields = CustomUserSerializer.Meta.fields + (
@@ -72,4 +75,8 @@ class UserWithRecipesSerializer(CustomUserSerializer):
                 recipes = recipes[:int(limit)]
             except ValueError:
                 pass
-        return ShortRecipeSerializer(recipes, many=True, context=self.context).data
+        return ShortRecipeSerializer(
+            recipes,
+            many=True,
+            context=self.context
+        ).data

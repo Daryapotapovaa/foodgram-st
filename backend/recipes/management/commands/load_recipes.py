@@ -8,6 +8,7 @@ from django.core.files.images import ImageFile
 
 User = get_user_model()
 
+
 class Command(BaseCommand):
     help = 'Загрузка рецептов из recipes.json'
 
@@ -16,9 +17,11 @@ class Command(BaseCommand):
             recipes = json.load(file)
 
         for recipe_data in recipes:
-            author = User.objects.filter(username=recipe_data['author']).first()
+            author = User.objects.filter(
+                username=recipe_data['author']).first()
             if not author:
-                self.stdout.write(self.style.ERROR(f"Автор {recipe_data['author']} не найден."))
+                self.stdout.write(self.style.ERROR(
+                    f"Автор {recipe_data['author']} не найден."))
                 continue
 
             recipe = Recipe.objects.create(
@@ -29,16 +32,20 @@ class Command(BaseCommand):
             )
 
             if recipe_data.get('image'):
-                image_path = os.path.join('api/preload_data', recipe_data['image'])
+                image_path = os.path.join(
+                    'api/preload_data', recipe_data['image'])
                 with open(image_path, 'rb') as img_file:
-                    recipe.image.save(os.path.basename(image_path), ImageFile(img_file), save=True)
+                    recipe.image.save(os.path.basename(
+                        image_path), ImageFile(img_file), save=True)
 
             for ingredient_info in recipe_data['ingredients']:
-                ingredient = Ingredient.objects.filter(name=ingredient_info['name']).first()
+                ingredient = Ingredient.objects.filter(
+                    name=ingredient_info['name']).first()
                 if ingredient:
                     IngredientInRecipe.objects.create(
                         recipe=recipe,
                         ingredient=ingredient,
                         amount=ingredient_info['amount']
                     )
-            self.stdout.write(self.style.SUCCESS(f'Создан рецепт: {recipe.name}'))
+            self.stdout.write(self.style.SUCCESS(
+                f'Создан рецепт: {recipe.name}'))

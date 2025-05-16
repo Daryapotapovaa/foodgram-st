@@ -5,8 +5,10 @@ from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from django.http import HttpResponse
-from .serializers import RecipeSerializer, IngredientSerializer, ShortRecipeSerializer
-from .models import Recipe, Ingredient, IngredientInRecipe, Favorite, ShoppingCart
+from .serializers import (RecipeSerializer, IngredientSerializer,
+                          ShortRecipeSerializer)
+from .models import (Recipe, Ingredient, IngredientInRecipe,
+                     Favorite, ShoppingCart)
 from api.permissions import IsAuthorOrReadOnly
 from api.pagination import CustomPagination
 from django.db.models import Sum
@@ -67,12 +69,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
                     {'error': 'Невозможно добавить рецепт второй раз'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-            
+
             return Response(
                 ShortRecipeSerializer(recipe).data,
                 status=status.HTTP_201_CREATED
             )
-        
+
         elif request.method == 'DELETE':
             instance = model.objects.filter(
                 user=user,
@@ -101,10 +103,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
     )
     def shopping_cart(self, request, pk=None):
         return self._handle_recipe_action(request, pk, ShoppingCart)
-    
+
     def generate_shopping_cart_csv(self, ingredients):
         response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="shopping_list.csv"'
+        response['Content-Disposition'] = (
+            'attachment; filename="shopping_list.csv"'
+        )
         writer = csv.writer(response)
         writer.writerow(['Ингредиент', 'Единица измерения', 'Количество'])
         for item in ingredients:
@@ -114,7 +118,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 item['total_amount']
             ])
         return response
-    
+
     @action(
         methods=['GET'],
         detail=False,
@@ -127,9 +131,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
         if not recipes.exists():
             return Response(
-                    {'error': 'В списке покупок не найдены рецепты'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                {'error': 'В списке покупок не найдены рецепты'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         ingredients = (
             IngredientInRecipe.objects

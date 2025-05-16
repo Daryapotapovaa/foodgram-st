@@ -7,7 +7,8 @@ class Command(BaseCommand):
     help = 'Загрузка ингредиентов ingredients.json'
 
     def handle(self, *args, **kwargs):
-        with open('api/preload_data/ingredients.json', encoding='utf-8') as file:
+        with open('api/preload_data/ingredients.json',
+                  encoding='utf-8') as file:
             data = json.load(file)
             count = 0
             for item in data:
@@ -17,4 +18,5 @@ class Command(BaseCommand):
                 )
                 if created:
                     count += 1
-            self.stdout.write(self.style.SUCCESS(f'{count} ингредиентов загружено'))
+            self.stdout.write(self.style.SUCCESS(
+                f'{count} ингредиентов загружено'))

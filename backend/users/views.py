@@ -4,13 +4,13 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from .serializers import UserAvatarSerializer, UserWithRecipesSerializer
-from rest_framework import serializers
 from api.pagination import CustomPagination
 from django.shortcuts import get_object_or_404
 from .models import Subscription
 
 
 User = get_user_model()
+
 
 class CustomUserViewSet(DjoserUserViewSet):
     pagination_class = CustomPagination
@@ -23,7 +23,6 @@ class CustomUserViewSet(DjoserUserViewSet):
     )
     def me(self, request, *args, **kwargs):
         return super().me(request, *args, **kwargs)
-
 
     @action(
         methods=["PUT", "DELETE"],
@@ -53,7 +52,7 @@ class CustomUserViewSet(DjoserUserViewSet):
                 )
             else:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
-            
+
         elif request.method == 'DELETE':
             if user.avatar:
                 user.avatar.delete()
@@ -61,7 +60,7 @@ class CustomUserViewSet(DjoserUserViewSet):
                 return Response(status=status.HTTP_204_NO_CONTENT)
 
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        
+
     @action(
         methods=['GET'],
         detail=False,
@@ -108,7 +107,7 @@ class CustomUserViewSet(DjoserUserViewSet):
                     {'error': 'Невозможно подписаться дважды'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-            
+
             serializer = self.get_serializer(
                 subscription.following,
                 context={'request': request}
@@ -117,7 +116,7 @@ class CustomUserViewSet(DjoserUserViewSet):
                 data=serializer.data,
                 status=status.HTTP_201_CREATED
             )
-        
+
         elif request.method == 'DELETE':
 
             subscription = Subscription.objects.filter(

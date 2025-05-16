@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from users.serializers import CustomUserSerializer
 from drf_extra_fields.fields import Base64ImageField
-from .models import Ingredient, Recipe, IngredientInRecipe, Favorite, ShoppingCart
+from .models import (Ingredient, Recipe, IngredientInRecipe,
+                     Favorite, ShoppingCart)
 
 
 class IngredientSerializer(serializers.ModelSerializer):
@@ -51,12 +52,12 @@ class RecipeSerializer(serializers.ModelSerializer):
         read_only_fields = (
             'id', 'author', 'is_favorited', 'is_in_shopping_cart'
         )
-        
+
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['image'] = instance.image.url
         return representation
-    
+
     def add_ingredients(self, recipe, ingredient_data):
         for ingredient in ingredient_data:
             IngredientInRecipe.objects.create(
@@ -73,10 +74,11 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         ingredient_data = validated_data.pop('ingredient_in_recipe', None)
-        
+
         instance.name = validated_data.get('name', instance.name)
         instance.text = validated_data.get('text', instance.text)
-        instance.cooking_time = validated_data.get('cooking_time', instance.cooking_time)
+        instance.cooking_time = validated_data.get(
+            'cooking_time', instance.cooking_time)
         instance.image = validated_data.get('image', instance.image) or ""
         if ingredient_data:
             instance.ingredient_in_recipe.all().delete()
@@ -91,7 +93,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({
                 'ingredients': 'Обязательное поле (минимум 1)'
             })
-        
+
         image = self.initial_data.get('image')
         if not image:
             raise serializers.ValidationError({
@@ -113,14 +115,14 @@ class RecipeSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({
                 'ingredients': 'Ингредиенты не должны повторяться'
             })
-        
+
         for ingredient in ingredients:
             amount = int(ingredient.get('amount'))
             if amount <= 0:
                 raise serializers.ValidationError({
-                    'ingredients': 'Количество ингредиента должно быть больше нуля'
+                    'ingredients': 'Кол-во ингредиента должно быть больше нуля'
                 })
-            
+
         data['ingredient_in_recipe'] = ingredients
         return data
 
@@ -137,11 +139,11 @@ class RecipeSerializer(serializers.ModelSerializer):
             user=request.user.id,
             recipe=obj
         ).exists()
-    
+
+
 class ShortRecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = (
             'id', 'name', 'image', 'cooking_time'
         )
-

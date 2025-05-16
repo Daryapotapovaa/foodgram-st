@@ -135,16 +135,16 @@ REST_FRAMEWORK = {
     ],
 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE' : 10,
+    'PAGE_SIZE': 10,
 }
 
 DJOSER = {
-    'LOGIN_FIELD' : 'email',
-    "SERIALIZERS" : {
-        'current_user' : 'users.serializers.CustomUserSerializer',
-        'user' : 'users.serializers.CustomUserSerializer',
+    'LOGIN_FIELD': 'email',
+    "SERIALIZERS": {
+        'current_user': 'users.serializers.CustomUserSerializer',
+        'user': 'users.serializers.CustomUserSerializer',
     },
-    'HIDE_USERS' : False,
+    'HIDE_USERS': False,
     'PERMISSIONS': {
         'user': ['rest_framework.permissions.IsAuthenticated'],
         'user_list': ['rest_framework.permissions.AllowAny'],
