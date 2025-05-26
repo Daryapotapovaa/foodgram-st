@@ -103,7 +103,7 @@ class UserViewSet(DjoserUserViewSet):
             )
             if not created:
                 return Response(
-                    {'error': 'Невозможно подписаться на одного автора дважды'},
+                    {'error': f'Невозможно подписаться на {author.username} дважды'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 

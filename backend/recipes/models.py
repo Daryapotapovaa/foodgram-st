@@ -96,6 +96,12 @@ class Ingredient(models.Model):
         ordering = ('name',)
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
+        constraints = [
+            models.UniqueConstraint(
+                fields=["name", "measurement_unit"],
+                name="unique ingredient",
+            )
+        ]
 
 
 class Recipe(models.Model):
