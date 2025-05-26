@@ -1,4 +1,26 @@
-# Инструкция по запуску
+# Foodgram — Продуктовый помощник
+
+**Foodgram** — это веб-приложение для публикации рецептов, добавления их в избранное и список покупок, а также подписки на авторов.
+
+## Автор
+
+**Потапова Дарья Максимовна**
+
+🔗 [GitHub: Daryapotapovaa](https://github.com/Daryapotapovaa)
+
+## 🛠️ Стек технологий
+
+* Python 3.9
+* Django 3.2
+* Django REST Framework
+* PostgreSQL
+* Docker
+* Docker Compose
+* Nginx
+* Gunicorn
+* GitHub Actions
+
+## Инструкция по запуску
 ### Склонируйте репозиторий
 ```
 git clone https://github.com/Daryapotapovaa/foodgram-st.git
@@ -30,10 +52,12 @@ docker-compose exec backend python manage.py createsuperuser
 ```
 ### Загрузка подготовленных данных
 
-Для загрузки предварительно созданных пользователей, ингредиентов и рецептов используйте команды:
+Для загрузки предварительно созданных ингредиентов используйте команду:
 ```
 docker-compose exec backend python manage.py load_ingredients
-docker-compose exec backend python manage.py load_users
-docker-compose exec backend python manage.py load_recipes
 ```
+## Доступ к приложению
 
+* Frontend: [http://localhost/](http://localhost/)
+* Админка: [http://localhost/admin/](http://localhost/admin/)
+* API: [http://localhost/api/docs/](http://localhost/api/docs/)
