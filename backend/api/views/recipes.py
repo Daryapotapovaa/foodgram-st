@@ -114,11 +114,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
             "Ингредиенты:"
         ]
         
-        for i, item in enumerate(ingredients, 1):
+        for i, ingredient in enumerate(ingredients, 1):
             content.append(
-                f"{i}. {item['ingredient__name'].title()} - "
-                f"{item['total_amount']} "
-                f"{item['ingredient__measurement_unit']}"
+                f"{i}. {ingredient['ingredient__name'].title()} - "
+                f"{ingredient['total_amount']} "
+                f"{ingredient['ingredient__measurement_unit']}"
             )
         
         content.extend([
@@ -144,12 +144,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def download_shopping_cart(self, request):
         user = request.user
         recipes = Recipe.objects.filter(shoppingcarts__user=user)
-
-        # if not recipes.exists():
-        #     return Response(
-        #         {'error': 'В списке покупок не найдены рецепты'},
-        #         status=status.HTTP_400_BAD_REQUEST
-        #     )
 
         ingredients = (
             IngredientInRecipe.objects
