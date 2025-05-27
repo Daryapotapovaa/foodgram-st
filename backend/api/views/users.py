@@ -1,5 +1,6 @@
 from djoser.views import UserViewSet as DjoserUserViewSet
 from django.contrib.auth import get_user_model
+from rest_framework.exceptions import ValidationError
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -90,33 +91,29 @@ class UserViewSet(DjoserUserViewSet):
         user = request.user
         author = get_object_or_404(User, id=id)
 
-        if request.method == 'POST':
+        if request.method != 'POST':
+            get_object_or_404(
+                Subscription, follower=user, author=author
+            ).delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
-            if user == author:
-                return Response(
-                    {'error': 'Невозможно подписаться на себя'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            subscription, created = Subscription.objects.get_or_create(
-                follower=user,
-                author=author
-            )
-            if not created:
-                return Response(
-                    {'error': f'Невозможно подписаться на {author.username} дважды'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+        if user == author:
+            raise ValidationError('Невозможно подписаться на себя')
 
-            serializer = self.get_serializer(
-                subscription.author,
-                context={'request': request}
-            )
-            return Response(
-                data=serializer.data,
-                status=status.HTTP_201_CREATED
+        subscription, created = Subscription.objects.get_or_create(
+            follower=user,
+            author=author
+        )
+        if not created:
+            raise ValidationError(
+                f'Невозможно подписаться на {author.username} дважды'
             )
 
-        get_object_or_404(
-            Subscription, follower=user, author=author
-        ).delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        serializer = self.get_serializer(
+            subscription.author,
+            context={'request': request}
+        )
+        return Response(
+            data=serializer.data,
+            status=status.HTTP_201_CREATED
+        )

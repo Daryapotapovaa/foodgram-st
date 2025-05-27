@@ -11,8 +11,9 @@ from django.db.models import Sum
 from django.urls import reverse
 from django_filters.rest_framework import DjangoFilterBackend
 
-from api.serializers.recipes import (RecipeSerializer, IngredientSerializer,
-                          ShortRecipeSerializer)
+from api.serializers.recipes import (RecipeWriteSerializer, RecipeReadSerializer,
+                                     IngredientSerializer)
+from api.serializers.users import ShortRecipeSerializer
 from recipes.models import (Recipe, Ingredient, IngredientInRecipe,
                      Favorite, ShoppingCart)
 from api.permissions import IsAuthorOrReadOnly
@@ -36,11 +37,15 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    serializer_class = RecipeSerializer
     pagination_class = LimitPageNumberPagination
     permission_classes = [IsAuthorOrReadOnly]
     filter_backends = [DjangoFilterBackend]
     filterset_class = RecipeFilter
+
+    def get_serializer_class(self):
+        if self.action in ["list", "retrieve"]:
+            return RecipeReadSerializer
+        return RecipeWriteSerializer
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -63,29 +68,31 @@ class RecipeViewSet(viewsets.ModelViewSet):
         user = request.user
         recipe = get_object_or_404(Recipe, pk=recipe_id)
 
-        if request.method == 'POST':
-            obj, created = model.objects.get_or_create(
+        if request.method != 'POST':
+            get_object_or_404(
+                model,
                 user=user,
                 recipe=recipe
-            )
-
-            if not created:
-                return Response(
-                    {'error': f'Невозможно добавить рецепт с id={recipe_id} второй раз'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-
-            return Response(
-                ShortRecipeSerializer(recipe).data,
-                status=status.HTTP_201_CREATED
-            )
+            ).delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
         
-        get_object_or_404(
-            model,
+        obj, created = model.objects.get_or_create(
             user=user,
             recipe=recipe
-        ).delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        )
+
+        if not created:
+            return Response(
+                {'error': f'Невозможно добавить рецепт с id={recipe_id} второй раз'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        return Response(
+            ShortRecipeSerializer(recipe).data,
+            status=status.HTTP_201_CREATED
+        )
+        
+        
 
     @action(
         methods=["POST", "DELETE"],
@@ -105,7 +112,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def shopping_cart(self, request, pk=None):
         return self._handle_recipe_action(request, pk, ShoppingCart)
 
-    def generate_shopping_cart_csv(self, ingredients, recipes, user):
+    def generate_shopping_cart(self, ingredients, recipes, user):
         current_date = datetime.now().strftime("%d.%m.%Y %H:%M")
     
         content = [
@@ -129,10 +136,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
         ])
         
         return FileResponse(
-            ("\n".join(content)),
+            "\n".join(content),
             as_attachment=True,
             filename="shopping_list.txt",
-            content_type="text/plain; charset=utf-8",
+            content_type="text/plain",
         )
 
     @action(
@@ -153,4 +160,4 @@ class RecipeViewSet(viewsets.ModelViewSet):
             .order_by('ingredient__name')
         )
 
-        return self.generate_shopping_cart_csv(ingredients, recipes, user)
+        return self.generate_shopping_cart(ingredients, recipes, user)
