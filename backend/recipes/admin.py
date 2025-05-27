@@ -156,12 +156,13 @@ class CookingTimeFilter(admin.SimpleListFilter):
         cooking_times = [r.cooking_time for r in Recipe.objects.all()]
         if not cooking_times:
             return []
+        
+        unique_times_count = len(set(cooking_times))
+        if unique_times_count < 3:
+            return []
 
         min_time = min(cooking_times)
         max_time = max(cooking_times)
-
-        if max_time - min_time <= 5:
-            return []
 
         time_range = max_time - min_time
         self._thresholds = (
@@ -170,14 +171,9 @@ class CookingTimeFilter(admin.SimpleListFilter):
         )
         threshold1, threshold2 = self._thresholds
 
-        quick = medium = long = 0
-        for t in cooking_times:
-            if t < threshold1:
-                quick += 1
-            elif t < threshold2:
-                medium += 1
-            else:
-                long += 1
+        quick = sum(1 for t in cooking_times if t < threshold1)
+        medium = sum(1 for t in cooking_times if threshold1 <= t < threshold2)
+        long = sum(1 for t in cooking_times if t >= threshold2)
 
         return [
             ("quick", f"до {threshold1} мин ({quick})"),
@@ -235,12 +231,10 @@ class RecipeAdmin(admin.ModelAdmin):
     @mark_safe
     def get_ingredients(self, obj):
         return "<br>".join(
-            [
-                f"{item.ingredient.name} - "
-                f"{item.amount} "
-                f"{item.ingredient.measurement_unit}"
-                for item in obj.ingredients_in_recipe.all()
-            ]
+            f"{item.ingredient.name} - "
+            f"{item.amount} "
+            f"{item.ingredient.measurement_unit}"
+            for item in obj.ingredients_in_recipe.all()
         )
 
     @admin.display(description="Изображение")
