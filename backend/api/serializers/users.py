@@ -2,14 +2,13 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from djoser.serializers import UserSerializer as DjoserUserSerializer
 from drf_extra_fields.fields import Base64ImageField
-from recipes.models import Subscription
+from recipes.models import Subscription, Recipe
 
 
 User = get_user_model()
 
 
 class UserSerializer(DjoserUserSerializer):
-    avatar = serializers.SerializerMethodField(read_only=True)
     is_subscribed = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -19,9 +18,6 @@ class UserSerializer(DjoserUserSerializer):
             'last_name', 'is_subscribed', 'avatar'
         )
         read_only_fields = fields
-
-    def get_avatar(self, obj):
-        return obj.avatar.url if obj.avatar else None
 
     def get_is_subscribed(self, obj):
         request = self.context.get('request')
@@ -53,19 +49,23 @@ class UserWithRecipesSerializer(UserSerializer):
             'recipes',
             'recipes_count'
         )
+        read_only_fields = fields
 
     def get_recipes(self, obj):
-        from api.serializers.recipes import ShortRecipeSerializer
         request = self.context.get('request')
-        limit = request.query_params.get('recipes_limit')
+        limit = request.query_params.get('recipes_limit', 10**10)
         recipes = obj.recipes.all()
-        if limit is not None:
-            try:
-                recipes = recipes[:int(limit)]
-            except ValueError:
-                pass
+        recipes = recipes[:int(limit)]
         return ShortRecipeSerializer(
             recipes,
             many=True,
             context=self.context
         ).data
+
+class ShortRecipeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Recipe
+        fields = (
+            'id', 'name', 'image', 'cooking_time'
+        )
+        read_only_fields = fields
