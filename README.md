@@ -6,9 +6,9 @@
 
 **Потапова Дарья Максимовна**
 
-🔗 [GitHub: Daryapotapovaa](https://github.com/Daryapotapovaa)
+[GitHub: Daryapotapovaa](https://github.com/Daryapotapovaa)
 
-## 🛠️ Стек технологий
+## Стек технологий
 
 * Python 3.9
 * Django 3.2
